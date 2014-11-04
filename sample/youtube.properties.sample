@@ -1,0 +1,3 @@
+#Contains API Secret used to validate your application. Commit to internal source control; avoid making secret public.
+youtubeDeveloperKey=EDIT_THIS
+youtubeBrowserDevKey=EDIT_THIS

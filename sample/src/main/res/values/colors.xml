@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="youtube_title_text">#525252</color>
+    <color name="youtube_description_text">#9f9f9f</color>
+</resources>
