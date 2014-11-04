@@ -20,6 +20,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile 'com.android.support:appcompat-v7:21.0.0'
+
+    compile 'com.jakewharton:butterknife:6.0.0'
+    compile 'com.netflix.rxjava:rxjava-android:0.20.6'
+
+    compile 'com.squareup.picasso:picasso:2.3.4'
+
+    compile 'com.google.android.gms:play-services:+'
+    compile 'com.android.support:support-v13:20.0.0'
+    compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
 }

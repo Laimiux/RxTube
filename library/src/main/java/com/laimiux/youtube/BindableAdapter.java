@@ -1,4 +1,4 @@
-package com.laimiux.youtubeplayerexample;
+package com.laimiux.youtube;
 
 import android.content.Context;
 import android.view.LayoutInflater;

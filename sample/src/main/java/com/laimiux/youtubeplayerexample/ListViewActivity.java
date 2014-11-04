@@ -1,12 +1,13 @@
 package com.laimiux.youtubeplayerexample;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.google.api.services.youtube.model.Video;
+import com.laimiux.youtube.PlayerActivity;
+import com.laimiux.youtube.YoutubeListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +30,16 @@ public class ListViewActivity extends Activity {
         ButterKnife.inject(this);
 
         List<String> ids = new ArrayList<String>();
-        ids.add("EU56blypaVI");
-        ids.add("i1XzCJ9yEf0");
+        ids.add("iX-QaNzd-0Y");
+        ids.add("nCkpzqqog4k");
+        ids.add("pB-5XG-DbAA");
         ids.add("QD7qIthSdkA");
         ids.add("GtKnRFNffsI");
         ids.add("IIA1XQnAv5s");
         ids.add("6vopR3ys8Kw");
+        ids.add("uJ_1HMAGb4k");
+        ids.add("MYSVMgRr6pw");
+        ids.add("oWYp1xRPH5g");
 
         mYoutubeListView.setKey(BuildConfig.YOUTUBE_BROWSER_DEV_KEY);
         mYoutubeListView.setYoutubeVideoIDs(ids);
@@ -42,12 +47,13 @@ public class ListViewActivity extends Activity {
         mYoutubeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Video itemAtPosition = (Video) parent.getItemAtPosition(position);
-
-                Intent intent = new Intent(ListViewActivity.this, PlayerActivity.class);
-                intent.putExtra("video_id", itemAtPosition.getId());
-                startActivity(intent);
+                final Video video = (Video) parent.getItemAtPosition(position);
+                showVideo(video);
             }
         });
+    }
+
+    private void showVideo(Video video) {
+        PlayerActivity.showPlayer(this, BuildConfig.YOUTUBE_DEV_KEY, video.getId());
     }
 }
