@@ -142,8 +142,4 @@ public class YoutubeListView extends ListView {
     }
 
 
-    public interface YouTubeProvider {
-        public YouTube getYouTube();
-    }
-
 }
