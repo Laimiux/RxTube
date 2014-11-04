@@ -134,11 +134,15 @@ public class YoutubeListView extends ListView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+
+        Log.d("YoutubeListView", "onAttachedToWindow()");
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+
+        Log.d("YoutubeListView", "onDetachedFromWindow()");
     }
 
 
