@@ -1,5 +1,12 @@
 apply plugin: 'com.android.library'
 
+// Manifest version information!
+def versionMajor = 0
+def versionMinor = 0
+def versionPatch = 1
+def versionBuild = 1 // bump for dogfood builds, public betas, etc.
+
+
 android {
     compileSdkVersion 21
     buildToolsVersion "21.0.2"
@@ -8,9 +15,10 @@ android {
         applicationId "com.laimiux.youtube"
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
+
     buildTypes {
         release {
             runProguard false
@@ -21,7 +29,7 @@ android {
 
 dependencies {
     compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile 'com.android.support:appcompat-v7:21.0.0'
+
 
     compile 'com.jakewharton:butterknife:6.0.0'
     compile 'com.netflix.rxjava:rxjava-android:0.20.6'
@@ -29,6 +37,66 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.3.4'
 
     compile 'com.google.android.gms:play-services:+'
-    compile 'com.android.support:support-v13:20.0.0'
     compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
 }
+
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+version = "${versionMajor}.${versionMinor}.${versionPatch}"
+group = "com.laimiux"
+
+configurations {
+    archives {
+        extendsFrom configurations.default
+    }
+}
+
+signing {
+    required { has("release") && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories.mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: sonatypeRepo) {
+            authentication(userName: sonatypeUsername,
+                    password: sonatypePassword)
+        }
+
+        pom.project {
+            name 'Android Youtube List View'
+            packaging 'aar'
+            description 'Youtube List View Widget for Android'
+            url 'https://github.com/Laimiux/android-youtube-listview'
+
+            scm {
+                url 'scm:git@github.com:laimiux/android-youtube-listview.git'
+                connection 'scm:git@github.com:laimiux/android-youtube-listview.git'
+                developerConnection 'scm:git@github.com:laimiux/android-youtube-list-view.git'
+            }
+
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'laimiux'
+                    name 'Laimonas Turauskas'
+                    email 'laimiux@gmail.com'
+                }
+            }
+        }
+    }
+}
+

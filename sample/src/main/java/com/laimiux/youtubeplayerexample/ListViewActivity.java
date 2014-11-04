@@ -41,6 +41,9 @@ public class ListViewActivity extends Activity {
         ids.add("MYSVMgRr6pw");
         ids.add("oWYp1xRPH5g");
         ids.add("qlGQoxzdwP4");
+        ids.add("4ZHwu0uut3k");
+        ids.add("b6dD-I7kJmM");
+        ids.add("NDH1bGnNMjw");
 
         mYoutubeListView.setKey(BuildConfig.YOUTUBE_BROWSER_DEV_KEY);
         mYoutubeListView.setYoutubeVideoIDs(ids);
