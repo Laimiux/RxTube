@@ -2,6 +2,7 @@ package com.laimiux.youtube;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -18,30 +19,39 @@ public class PlayerActivity extends YouTubeBaseActivity {
 
     private YouTubePlayerView mYouTubePlayerView;
 
+    // Video variables.
+    private String mYoutubeDevKey;
+    private String mVideoId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String youtubeDevKey = getIntent().getStringExtra(YOUTUBE_DEV_KEY_EXTRA);
+        mYoutubeDevKey = getIntent().getStringExtra(YOUTUBE_DEV_KEY_EXTRA);
 
-        if (youtubeDevKey == null || youtubeDevKey.length() == 0) {
+        if (mYoutubeDevKey == null || mYoutubeDevKey.length() == 0) {
             throw new IllegalStateException("You need to pass a valid youtube_dev_key");
         }
 
-        final String videoId = getIntent().getStringExtra(VIDEO_ID_EXTRA);
+        mVideoId = getIntent().getStringExtra(VIDEO_ID_EXTRA);
 
-        if (videoId == null || videoId.length() == 0) {
+        if (mVideoId == null || mVideoId.length() == 0) {
             throw new IllegalStateException("You need to pass a valid video_id");
         }
 
         setContentView(R.layout.youtube_player_view_container);
 
         mYouTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player_view);
-        mYouTubePlayerView.initialize(youtubeDevKey, new YouTubePlayer.OnInitializedListener() {
+
+        initializeVideo();
+    }
+
+    private void initializeVideo() {
+        mYouTubePlayerView.initialize(mYoutubeDevKey, new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                youTubePlayer.loadVideo(videoId);
+                youTubePlayer.loadVideo(mVideoId);
             }
 
             @Override
@@ -55,15 +65,21 @@ public class PlayerActivity extends YouTubeBaseActivity {
                 }
             }
         });
+    }
 
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mYouTubePlayerView.onConfigurationChanged(newConfig);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == RECOVERY_DIALOG_REQUEST) {
+        if (requestCode == RECOVERY_DIALOG_REQUEST) {
 //            // Retry initialization if user performed a recovery action
-//            getYouTubePlayerProvider().initialize(DEVELOPER_KEY, this);
-//        }
+            initializeVideo();
+        }
     }
 
     public static void showPlayer(Activity activity, String youtubeDevKey, String videoId) {
