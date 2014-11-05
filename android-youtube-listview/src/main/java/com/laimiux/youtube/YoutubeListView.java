@@ -3,6 +3,7 @@ package com.laimiux.youtube;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
@@ -32,13 +33,19 @@ public class YoutubeListView extends ListView {
     private List<String> mYoutubeVideoIDs;
 
     // Requests
+    private int mItemsLeftInObservable;
     private Observable<String> mObservableEmitsVideoIDs;
-    private int mItemsPerPage = 10;
-    private int mPage = 0;
 
+    private int mItemsPerPage = 10;
+    private boolean mIsLoadingVideos;
 
     // Adapter
+    private List<Video> mVideos;
     private BaseAdapter mAdapter;
+
+    // State
+    private int mVisibleThreshold = 5; // How many items left to scroll, when starting to download more.
+    private OnScrollListener mScrollListener;
 
 
     public YoutubeListView(Context context, AttributeSet attrs) {
@@ -64,10 +71,11 @@ public class YoutubeListView extends ListView {
 
         mYoutubeVideoIDs = ids;
 
+        mItemsLeftInObservable = ids.size();
         mObservableEmitsVideoIDs = Observable.from(ids);
 
 
-        loadPage(1).subscribe(new Observer<List<Video>>() {
+        loadPage().subscribe(new Observer<List<Video>>() {
             @Override
             public void onCompleted() {
                 listener.onLoad();
@@ -84,56 +92,105 @@ public class YoutubeListView extends ListView {
             }
         });
 
+
+        setInfiniteScroll();
     }
 
-    private Observable<List<Video>> loadPage(int page) {
-        int start = (page - 1) * mItemsPerPage;
 
+    private void setInfiniteScroll() {
+        super.setOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (mScrollListener != null) {
+                    mScrollListener.onScrollStateChanged(view, scrollState);
+                }
+            }
 
-        final Observable<List<Video>> listObservable = mObservableEmitsVideoIDs
-                .flatMap(new Func1<String, Observable<VideoListResponse>>() {
-                    @Override
-                    public Observable<VideoListResponse> call(final String videoId) {
-                        return getVideoListResponseObservable(videoId);
-                    }
-                })
-                .map(new Func1<VideoListResponse, List<Video>>() {
-                    @Override
-                    public List<Video> call(VideoListResponse videoListResponse) {
-                        return videoListResponse.getItems();
-                    }
-                })
-                .reduce(new Func2<List<Video>, List<Video>, List<Video>>() {
-                    @Override
-                    public List<Video> call(List<Video> videos, List<Video> videos2) {
-                        videos.addAll(videos2);
-                        return videos;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .cache();
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (mScrollListener != null) {
+                    mScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                }
 
-        listObservable
-                .subscribe(new Action1<List<Video>>() {
-                    @Override
-                    public void call(List<Video> videoListResponses) {
+                if ((totalItemCount - visibleItemCount) <= (firstVisibleItem + mVisibleThreshold)) {
+                    loadNextPage();
+                }
+            }
+        });
 
-                        if (mAdapter == null) {
-                            mAdapter = createAdapter(videoListResponses);
-                            setAdapter(mAdapter);
-                        } else {
-                            mAdapter.notifyDataSetChanged();
+    }
+
+    private void loadNextPage() {
+        if (!mIsLoadingVideos) {
+            loadPage();
+        }
+    }
+
+    private Observable<List<Video>> loadPage() {
+        if (mItemsLeftInObservable == 0) {
+            return Observable.empty();
+        } else {
+            mIsLoadingVideos = true;
+            final Observable<List<Video>> listObservable = mObservableEmitsVideoIDs
+                    .take(mItemsPerPage)
+                    .flatMap(new Func1<String, Observable<VideoListResponse>>() {
+                        @Override
+                        public Observable<VideoListResponse> call(final String videoId) {
+                            return getVideoListResponseObservable(videoId);
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Log.e("YoutubeListView", "Failed to load VideoListResponses", throwable);
-                    }
-                });
+                    })
+                    .map(new Func1<VideoListResponse, List<Video>>() {
+                        @Override
+                        public List<Video> call(VideoListResponse videoListResponse) {
+                            return videoListResponse.getItems();
+                        }
+                    })
+                    .reduce(new Func2<List<Video>, List<Video>, List<Video>>() {
+                        @Override
+                        public List<Video> call(List<Video> videos, List<Video> videos2) {
+                            videos.addAll(videos2);
+                            return videos;
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .cache();
 
-        return listObservable;
+            listObservable
+                    .subscribe(new Action1<List<Video>>() {
+                        @Override
+                        public void call(List<Video> videoListResponses) {
+
+                            mItemsLeftInObservable -= mItemsPerPage;
+
+                            if (mItemsLeftInObservable <= 0) {
+                                mItemsLeftInObservable = 0;
+                                mObservableEmitsVideoIDs = Observable.empty();
+                            } else {
+                                mObservableEmitsVideoIDs = mObservableEmitsVideoIDs.skip(mItemsPerPage);
+                            }
+
+                            if (mAdapter == null) {
+                                mVideos = videoListResponses;
+                                mAdapter = createAdapter(videoListResponses);
+                                setAdapter(mAdapter);
+                            } else {
+                                mVideos.addAll(videoListResponses);
+                                mAdapter.notifyDataSetChanged();
+                            }
+
+                            mIsLoadingVideos = false;
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            mIsLoadingVideos = false;
+                            Log.e("YoutubeListView", "Failed to load VideoListResponses", throwable);
+                        }
+                    });
+
+            return listObservable;
+        }
     }
 
 
@@ -187,6 +244,12 @@ public class YoutubeListView extends ListView {
         Log.d("YoutubeListView", "onDetachedFromWindow()");
     }
 
+
+    @Override
+    public void setOnScrollListener(OnScrollListener listener) {
+        // Do not call super to keep our infinite scroll listener
+        mScrollListener = listener;
+    }
 
     public static interface OnListViewLoad {
         public void onLoad();
