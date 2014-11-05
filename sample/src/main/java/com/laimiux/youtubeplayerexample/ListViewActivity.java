@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.api.services.youtube.model.Video;
 import com.laimiux.youtube.PlayerActivity;
@@ -21,6 +23,7 @@ import butterknife.InjectView;
 public class ListViewActivity extends Activity {
 
     @InjectView(R.id.youtube_list_view) YoutubeListView mYoutubeListView;
+    @InjectView(R.id.progress_indicator_view) ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +47,29 @@ public class ListViewActivity extends Activity {
         ids.add("4ZHwu0uut3k");
         ids.add("b6dD-I7kJmM");
         ids.add("NDH1bGnNMjw");
+        ids.add("rnqUBmd5xRo");
+        ids.add("fJ5LaPyzaj0");
+        ids.add("6teOmBuMxw4");
 
-        mYoutubeListView.setKey(BuildConfig.YOUTUBE_BROWSER_DEV_KEY);
-        mYoutubeListView.setYoutubeVideoIDs(ids);
+
+        // Show loader here
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        mYoutubeListView.init(BuildConfig.YOUTUBE_BROWSER_DEV_KEY, ids, new YoutubeListView.OnListViewLoad() {
+            @Override
+            public void onLoad() {
+                // Hide loader here.
+                mProgressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                // Hide loader
+                mProgressBar.setVisibility(View.GONE);
+
+                Toast.makeText(ListViewActivity.this, "There was an error " + error, Toast.LENGTH_LONG).show();
+            }
+        });
 
         mYoutubeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

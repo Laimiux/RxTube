@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.laimiux.youtube.YoutubeListView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/youtube_list_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent">
+
+    <com.laimiux.youtube.YoutubeListView
+        android:id="@+id/youtube_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ProgressBar
+        android:id="@+id/progress_indicator_view"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"/>
+
+</FrameLayout>
+
