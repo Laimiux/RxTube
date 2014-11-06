@@ -17,10 +17,13 @@ import java.util.List;
 */
 public class SimpleYoutubeListAdapter extends BindableAdapter<Video> {
     private List<Video> mVideoListResponses;
+    private Picasso mPicasso;
 
     public SimpleYoutubeListAdapter(Context context, List<Video> videoListResponses) {
         super(context);
+
         mVideoListResponses = videoListResponses;
+        mPicasso = Picasso.with(context);
     }
 
     @Override
@@ -45,17 +48,6 @@ public class SimpleYoutubeListAdapter extends BindableAdapter<Video> {
 
     @Override
     public void bindView(Video item, int position, View view) {
-        ImageView imageView = (ImageView) view.findViewById(R.id.youtube_video_thumbnail);
-
-        Picasso.with(getContext())
-                .load(item.getSnippet().getThumbnails().getMedium().getUrl())
-                .into(imageView);
-
-        TextView titleTextView = (TextView) view.findViewById(R.id.youtube_video_title);
-        titleTextView.setText(item.getSnippet().getTitle());
-
-        TextView descriptionTextView = (TextView) view.findViewById(R.id.youtube_video_description);
-        descriptionTextView.setText(item.getSnippet().getDescription());
-
+        ((BasicYouTubeListItemView) view).bindView(mPicasso, item);
     }
 }

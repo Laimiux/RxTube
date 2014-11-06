@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 
 // Manifest version information!
 def versionMajor = 0
-def versionMinor = 0
-def versionPatch = 1
+def versionMinor = 1
+def versionPatch = 0
 def versionBuild = 1 // bump for dogfood builds, public betas, etc.
 
 
@@ -30,13 +30,9 @@ android {
 dependencies {
     compile files('libs/YouTubeAndroidPlayerApi.jar')
 
-
-    compile 'com.jakewharton:butterknife:6.0.0'
     compile 'com.netflix.rxjava:rxjava-android:0.20.6'
-
     compile 'com.squareup.picasso:picasso:2.3.4'
-
-    compile 'com.google.android.gms:play-services:+'
+//    compile 'com.google.android.gms:play-services:+'
     compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
 }
 
