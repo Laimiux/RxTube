@@ -1,6 +1,18 @@
 android-youtube-listview
 ============
 
+
+
+Download
+-------
+
+Via Gradle
+```groovy
+compile('com.laimiux:android-youtube-listview:0.1.1@aar') {
+    transitive = true;
+}
+```
+
 TODO
 
 License

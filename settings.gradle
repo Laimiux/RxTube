@@ -1,1 +1,2 @@
-include ':sample', ':android-youtube-listview'
+include ':android-youtube-listview'
+include ':sample'
