@@ -1,6 +1,9 @@
 android-youtube-listview
 ============
 
+Android widget which allows easy embedding of youtube videos into your application.
+
+![ListView](website/list.png)
 
 
 Download
@@ -12,8 +15,6 @@ compile('com.laimiux:android-youtube-listview:0.1.1@aar') {
     transitive = true;
 }
 ```
-
-TODO
 
 License
 -------
