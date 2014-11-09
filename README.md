@@ -5,6 +5,11 @@ Android widget which allows easy embedding of youtube videos into your applicati
 
 ![ListView](website/list.png)
 
+TODO
+-------
+
+* Save state on rotation
+
 
 Download
 -------
