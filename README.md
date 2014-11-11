@@ -21,6 +21,8 @@ compile('com.laimiux:android-youtube-listview:0.1.1@aar') {
 }
 ```
 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-android--youtube--listview-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1112)
+
 License
 -------
 
