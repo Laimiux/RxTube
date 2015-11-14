@@ -17,7 +17,7 @@ dependencies {
     compile 'com.netflix.rxjava:rxjava-android:0.20.6'
     compile 'com.squareup.picasso:picasso:2.3.4'
 //    compile 'com.google.android.gms:play-services:+'
-    compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
+    compile 'com.google.apis:google-api-services-youtube:v3-rev152-1.20.0'
 }
 
 version = "0.1.1"

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -30,13 +31,13 @@ public class PlayerActivity extends YouTubeBaseActivity {
 
         mYoutubeDevKey = getIntent().getStringExtra(YOUTUBE_DEV_KEY_EXTRA);
 
-        if (mYoutubeDevKey == null || mYoutubeDevKey.length() == 0) {
+        if (TextUtils.isEmpty(mYoutubeDevKey)) {
             throw new IllegalStateException("You need to pass a valid youtube_dev_key");
         }
 
         mVideoId = getIntent().getStringExtra(VIDEO_ID_EXTRA);
 
-        if (mVideoId == null || mVideoId.length() == 0) {
+        if (TextUtils.isEmpty(mVideoId)) {
             throw new IllegalStateException("You need to pass a valid video_id");
         }
 
