@@ -14,10 +14,7 @@ android {
     defaultConfig {
         applicationId "com.laimiux.youtubeplayerexample"
         minSdkVersion 14
-
-        // Cannot move this to higher version
-        // https://code.google.com/p/gdata-issues/issues/detail?id=6739
-        targetSdkVersion 19
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
     }
