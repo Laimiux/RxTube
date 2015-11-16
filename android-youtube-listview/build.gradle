@@ -19,7 +19,7 @@ android {
 dependencies {
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile 'io.reactivex:rxandroid:1.0.1'
-    compile project(':rxyoutube')
+    compile project(':rxtube')
 
 //    compile 'com.netflix.rxjava:rxjava-android:0.20.6'
     compile 'com.squareup.picasso:picasso:2.3.4'
