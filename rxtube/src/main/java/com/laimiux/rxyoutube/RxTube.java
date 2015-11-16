@@ -12,7 +12,10 @@ import rx.Subscriber;
 import rx.functions.Func0;
 import rx.schedulers.Schedulers;
 
-public class RxTube {
+/**
+ *
+ */
+public final class RxTube {
   private final YouTube youtube;
   private final String browserKey;
   private final Scheduler backgroundScheduler;

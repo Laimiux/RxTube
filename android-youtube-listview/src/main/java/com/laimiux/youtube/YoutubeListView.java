@@ -1,6 +1,7 @@
 package com.laimiux.youtube;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.AbsListView;
@@ -20,7 +21,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by laimiux on 11/2/14.
@@ -120,6 +120,15 @@ public class YoutubeListView extends ListView {
       isLoadingVideos = true;
       final Observable<List<Video>> listObservable = videoIdStream
           .take(itemsPerPage)
+          .reduce("", new Func2<String, String, String>() {
+            @Override public String call(String s, String s2) {
+              if (!TextUtils.isEmpty(s)) {
+                return s + "," + s2;
+              }
+
+              return s2;
+            }
+          })
           .flatMap(new Func1<String, Observable<VideoListResponse>>() {
             @Override
             public Observable<VideoListResponse> call(final String videoId) {
@@ -138,15 +147,11 @@ public class YoutubeListView extends ListView {
               videos.addAll(videos2);
               return videos;
             }
-          })
-          .subscribeOn(Schedulers.io())
-          .observeOn(AndroidSchedulers.mainThread())
-          .cache();
+          }).observeOn(AndroidSchedulers.mainThread()).cache();
 
       listObservable.subscribe(new Action1<List<Video>>() {
         @Override
         public void call(List<Video> videoListResponses) {
-
           itemsLeftInObservable -= itemsPerPage;
 
           if (itemsLeftInObservable <= 0) {
