@@ -16,7 +16,7 @@ Download
 
 Via Gradle
 ```groovy
-compile('com.laimiux:android-youtube-listview:0.1.1@aar') {
+compile('com.laimiux:android-youtube-listview:0.1.2@aar') {
     transitive = true;
 }
 ```
