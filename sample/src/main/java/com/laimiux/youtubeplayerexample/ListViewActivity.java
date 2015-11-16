@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.api.services.youtube.model.Video;
+import com.laimiux.rxyoutube.RxTube;
 import com.laimiux.youtube.PlayerActivity;
 import com.laimiux.youtube.YoutubeListView;
 
@@ -56,20 +57,20 @@ public class ListViewActivity extends Activity {
 
         // Show loader here
         mProgressBar.setVisibility(View.VISIBLE);
-
-        mYoutubeListView.init(BuildConfig.YOUTUBE_BROWSER_DEV_KEY, ids, new YoutubeListView.OnListViewLoad() {
-            @Override
-            public void onLoad() {
+        final RxTube rxTube = YoutubeExampleApplication.get(this).getYouTube();
+        mYoutubeListView.init(rxTube, ids, new YoutubeListView.OnListViewLoad() {
+            @Override public void onLoad() {
                 // Hide loader here.
                 mProgressBar.setVisibility(View.GONE);
             }
 
-            @Override
-            public void onError(Throwable error) {
+            @Override public void onError(Throwable error) {
                 // Hide loader
                 mProgressBar.setVisibility(View.GONE);
 
-                Toast.makeText(ListViewActivity.this, "There was an error " + error, Toast.LENGTH_LONG).show();
+                Toast.makeText(
+                    ListViewActivity.this,
+                    "There was an error " + error, Toast.LENGTH_LONG).show();
             }
         });
 

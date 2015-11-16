@@ -10,13 +10,12 @@ import android.widget.ListView;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
+import com.laimiux.rxyoutube.RxTube;
 
-import java.io.IOException;
 import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -28,8 +27,7 @@ import rx.schedulers.Schedulers;
  */
 public class YoutubeListView extends ListView {
   // Needed variables to operate
-  private YouTube youtube;
-  private String browserDevKey;
+  private RxTube youtube;
   private List<String> videoIds;
 
   // Requests
@@ -52,23 +50,12 @@ public class YoutubeListView extends ListView {
     super(context, attrs);
   }
 
-  public void init(String browserDevKey, List<String> ids, final OnListViewLoad listener) {
-    if (browserDevKey == null || browserDevKey.length() == 0) {
-      throw new IllegalStateException("browserDevKey cannot be null or empty");
+  public void init(RxTube tube, List<String> ids, final OnListViewLoad listener) {
+    if (tube == null) {
+      throw new IllegalStateException("tube cannot be null");
     }
 
-    this.browserDevKey = browserDevKey;
-
-    final Context context = getContext();
-    if (context instanceof YouTubeProvider) {
-      youtube = ((YouTubeProvider) context).getYouTube();
-    } else if (context.getApplicationContext() instanceof YouTubeProvider) {
-      youtube = ((YouTubeProvider) context.getApplicationContext()).getYouTube();
-    } else {
-      throw new IllegalStateException("Your activity or application must extend YouTubeProvider");
-    }
-
-
+    this.youtube = tube;
     videoIds = ids;
 
     itemsLeftInObservable = ids.size();
@@ -198,27 +185,14 @@ public class YoutubeListView extends ListView {
   }
 
   private Observable<VideoListResponse> getVideoListResponseObservable(final String videoId) {
-    return Observable.create(new Observable.OnSubscribe<VideoListResponse>() {
-      @Override
-      public void call(Subscriber<? super VideoListResponse> subscriber) {
-        try {
-          final YouTube.Videos.List contentDetails = youtube.videos().list("snippet");
-          contentDetails.setKey(browserDevKey);
-          contentDetails.setId(videoId);
-
-          final VideoListResponse videoListResponse = contentDetails.execute();
-
-          if (!subscriber.isUnsubscribed()) {
-            subscriber.onNext(videoListResponse);
-            subscriber.onCompleted();
+    return youtube.videos()
+        .list("snippet")
+        .flatMap(new Func1<YouTube.Videos.List, Observable<VideoListResponse>>() {
+          @Override public Observable<VideoListResponse> call(YouTube.Videos.List list) {
+            list.setId(videoId);
+            return youtube.execute(list);
           }
-        } catch (IOException e) {
-          if (!subscriber.isUnsubscribed()) {
-            subscriber.onError(e);
-          }
-        }
-      }
-    });
+        });
   }
 
   @Override

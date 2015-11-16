@@ -13,15 +13,27 @@ import rx.schedulers.Schedulers;
 
 public class RxTube {
   private final YouTube youtube;
+  private final String browserKey;
   private final Scheduler backgroundScheduler;
 
-  public RxTube(YouTube youtube) {
+  private final RxVideos rxVideos;
+
+
+  public RxTube(YouTube youtube, String browserKey) {
     this.youtube = youtube;
+    this.browserKey = browserKey;
     backgroundScheduler = Schedulers.from(Executors.newSingleThreadExecutor());
+    rxVideos = new RxVideos(youtube.videos(), backgroundScheduler);
   }
 
 
+  public RxVideos videos() {
+    return rxVideos;
+  }
+
   public <T> Observable<T> execute(final YouTubeRequest<T> request) {
+    // Decorate request
+    request.setKey(browserKey);
     return Observable.defer(new Func0<Observable<T>>() {
       @Override public Observable<T> call() {
         try {
