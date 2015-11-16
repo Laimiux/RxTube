@@ -185,14 +185,13 @@ public class YoutubeListView extends ListView {
   }
 
   private Observable<VideoListResponse> getVideoListResponseObservable(final String videoId) {
-    return youtube.videos()
-        .list("snippet")
-        .flatMap(new Func1<YouTube.Videos.List, Observable<VideoListResponse>>() {
-          @Override public Observable<VideoListResponse> call(YouTube.Videos.List list) {
-            list.setId(videoId);
-            return youtube.execute(list);
-          }
-        });
+    return youtube.create(new RxTube.Query<YouTube.Videos.List>() {
+      @Override public YouTube.Videos.List create(YouTube youTube) throws Exception {
+        final YouTube.Videos.List query = youTube.videos().list("snippet");
+        query.setId(videoId);
+        return query;
+      }
+    });
   }
 
   @Override
