@@ -18,41 +18,41 @@ public class PlayerActivity extends YouTubeBaseActivity {
     public static final String YOUTUBE_DEV_KEY_EXTRA = "youtube_dev_key";
     public static final String VIDEO_ID_EXTRA = "video_id";
 
-    private YouTubePlayerView mYouTubePlayerView;
+    private YouTubePlayerView youtubePlayerView;
 
     // Video variables.
-    private String mYoutubeDevKey;
-    private String mVideoId;
+    private String youtubeDevKey;
+    private String videoId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mYoutubeDevKey = getIntent().getStringExtra(YOUTUBE_DEV_KEY_EXTRA);
+        youtubeDevKey = getIntent().getStringExtra(YOUTUBE_DEV_KEY_EXTRA);
 
-        if (TextUtils.isEmpty(mYoutubeDevKey)) {
+        if (TextUtils.isEmpty(youtubeDevKey)) {
             throw new IllegalStateException("You need to pass a valid youtube_dev_key");
         }
 
-        mVideoId = getIntent().getStringExtra(VIDEO_ID_EXTRA);
+        videoId = getIntent().getStringExtra(VIDEO_ID_EXTRA);
 
-        if (TextUtils.isEmpty(mVideoId)) {
+        if (TextUtils.isEmpty(videoId)) {
             throw new IllegalStateException("You need to pass a valid video_id");
         }
 
         setContentView(R.layout.youtube_player_view_container);
 
-        mYouTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player_view);
+        youtubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player_view);
 
         initializeVideo();
     }
 
     private void initializeVideo() {
-        mYouTubePlayerView.initialize(mYoutubeDevKey, new YouTubePlayer.OnInitializedListener() {
+        youtubePlayerView.initialize(youtubeDevKey, new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                youTubePlayer.loadVideo(mVideoId);
+                youTubePlayer.loadVideo(videoId);
             }
 
             @Override
@@ -72,7 +72,7 @@ public class PlayerActivity extends YouTubeBaseActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mYouTubePlayerView.onConfigurationChanged(newConfig);
+        youtubePlayerView.onConfigurationChanged(newConfig);
     }
 
     @Override
