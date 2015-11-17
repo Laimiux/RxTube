@@ -19,6 +19,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
@@ -29,6 +30,7 @@ public class ListViewActivity extends Activity {
 
   @InjectView(R.id.youtube_list_view) ListView listView;
   @InjectView(R.id.progress_indicator_view) ProgressBar progressBar;
+  private Subscription videoSubscription;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class ListViewActivity extends Activity {
     // Show loader here
     progressBar.setVisibility(View.VISIBLE);
     final RxTube rxTube = YoutubeExampleApplication.get(this).getYouTube();
-    rxTube.create(new RxTube.Query<YouTube.Videos.List>() {
+    videoSubscription = rxTube.create(new RxTube.Query<YouTube.Videos.List>() {
       @Override public YouTube.Videos.List create(YouTube youTube) throws Exception {
         final YouTube.Videos.List request = youTube.videos().list("snippet");
         request.setId(TextUtils.join(",", ids));
@@ -92,6 +94,15 @@ public class ListViewActivity extends Activity {
         showVideo(video);
       }
     });
+  }
+
+  @Override protected void onDestroy() {
+    if(videoSubscription != null) {
+      videoSubscription.unsubscribe();
+      videoSubscription = null;
+    }
+
+    super.onDestroy();
   }
 
   private void showVideo(Video video) {
