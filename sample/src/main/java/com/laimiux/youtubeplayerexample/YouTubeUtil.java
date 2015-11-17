@@ -1,4 +1,4 @@
-package com.laimiux.youtube;
+package com.laimiux.youtubeplayerexample;
 
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;

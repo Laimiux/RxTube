@@ -32,8 +32,12 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.0.0'
-    compile project(':android-youtube-listview')
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
+    compile 'io.reactivex:rxandroid:1.0.1'
+    compile project(':rxtube')
 
+//    compile 'com.netflix.rxjava:rxjava-android:0.20.6'
+    compile 'com.squareup.picasso:picasso:2.3.4'
     compile 'com.jakewharton:butterknife:6.0.0'
 }

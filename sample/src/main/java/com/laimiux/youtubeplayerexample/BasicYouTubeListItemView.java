@@ -1,4 +1,4 @@
-package com.laimiux.youtube;
+package com.laimiux.youtubeplayerexample;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -15,10 +15,9 @@ import com.squareup.picasso.RequestCreator;
  * Created by laimiux on 11/5/14.
  */
 public class BasicYouTubeListItemView extends RelativeLayout {
-
-    private ImageView mImageView;
-    private TextView mTitleTextView;
-    private TextView mDescriptionTextView;
+    private ImageView imageView;
+    private TextView titleTextView;
+    private TextView descriptionTextView;
 
     // Request
     private RequestCreator mRequest;
@@ -34,9 +33,9 @@ public class BasicYouTubeListItemView extends RelativeLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        mImageView = (ImageView) findViewById(R.id.youtube_video_thumbnail);
-        mTitleTextView = (TextView) findViewById(R.id.youtube_video_title);
-        mDescriptionTextView = (TextView) findViewById(R.id.youtube_video_description);
+        imageView = (ImageView) findViewById(R.id.youtube_video_thumbnail);
+        titleTextView = (TextView) findViewById(R.id.youtube_video_title);
+        descriptionTextView = (TextView) findViewById(R.id.youtube_video_description);
 
         final Resources resources = getResources();
         mWidth = resources.getDimensionPixelSize(R.dimen.youtube_image_width);
@@ -45,8 +44,8 @@ public class BasicYouTubeListItemView extends RelativeLayout {
     }
 
     public void bindView(Picasso picasso, Video video) {
-        mTitleTextView.setText(video.getSnippet().getTitle());
-        mDescriptionTextView.setText(video.getSnippet().getDescription());
+        titleTextView.setText(video.getSnippet().getTitle());
+        descriptionTextView.setText(video.getSnippet().getDescription());
 
 
         mRequest = picasso.load(video.getSnippet().getThumbnails().getMedium().getUrl());
@@ -59,7 +58,7 @@ public class BasicYouTubeListItemView extends RelativeLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         if (mRequest != null) {
-            mRequest.resize(mWidth, mHeight).noFade().centerCrop().into(mImageView);
+            mRequest.resize(mWidth, mHeight).noFade().centerCrop().into(imageView);
             mRequest = null;
         }
     }

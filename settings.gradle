@@ -1,2 +1,2 @@
-include ':android-youtube-listview', ':rxtube'
+include ':rxtube'
 include ':sample'

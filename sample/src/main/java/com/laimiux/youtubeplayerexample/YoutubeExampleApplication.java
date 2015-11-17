@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.google.api.services.youtube.YouTube;
 import com.laimiux.rxyoutube.RxTube;
-import com.laimiux.youtube.YouTubeUtil;
 
 /**
  * Created by laimiux on 11/2/14.

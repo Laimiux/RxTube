@@ -1,11 +1,9 @@
-package com.laimiux.youtube;
+package com.laimiux.youtubeplayerexample;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.api.services.youtube.model.Video;
 import com.squareup.picasso.Picasso;
@@ -16,24 +14,24 @@ import java.util.List;
 * Created by laimiux on 11/3/14.
 */
 public class SimpleYoutubeListAdapter extends BindableAdapter<Video> {
-    private List<Video> mVideoListResponses;
-    private Picasso mPicasso;
+    private List<Video> videos;
+    private Picasso picasso;
 
     public SimpleYoutubeListAdapter(Context context, List<Video> videoListResponses) {
         super(context);
 
-        mVideoListResponses = videoListResponses;
-        mPicasso = Picasso.with(context);
+        videos = videoListResponses;
+        picasso = Picasso.with(context);
     }
 
     @Override
     public int getCount() {
-        return mVideoListResponses.size();
+        return videos.size();
     }
 
     @Override
     public Video getItem(int position) {
-        return mVideoListResponses.get(position);
+        return videos.get(position);
     }
 
     @Override
@@ -48,6 +46,6 @@ public class SimpleYoutubeListAdapter extends BindableAdapter<Video> {
 
     @Override
     public void bindView(Video item, int position, View view) {
-        ((BasicYouTubeListItemView) view).bindView(mPicasso, item);
+        ((BasicYouTubeListItemView) view).bindView(picasso, item);
     }
 }
