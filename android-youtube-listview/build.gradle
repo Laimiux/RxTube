@@ -1,0 +1,81 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+repositories {
+    mavenCentral()
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
+
+    compile 'com.netflix.rxjava:rxjava-android:0.20.6'
+    compile 'com.squareup.picasso:picasso:2.3.4'
+//    compile 'com.google.android.gms:play-services:+'
+    compile 'com.google.apis:google-api-services-youtube:v3-rev152-1.20.0'
+}
+
+version = "0.1.2"
+group = "com.laimiux"
+
+configurations {
+    archives {
+        extendsFrom configurations.default
+    }
+}
+
+signing {
+    required { has("release") && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories.mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: sonatypeRepo) {
+            authentication(userName: NEXUS_USERNAME,
+                    password: NEXUS_PASSWORD)
+        }
+
+        pom.project {
+            name 'Android Youtube List View'
+            packaging 'aar'
+            description 'Youtube List View Widget for Android'
+            url 'https://github.com/Laimiux/android-youtube-listview'
+
+            scm {
+                url 'scm:git@github.com:laimiux/android-youtube-listview.git'
+                connection 'scm:git@github.com:laimiux/android-youtube-listview.git'
+                developerConnection 'scm:git@github.com:laimiux/android-youtube-list-view.git'
+            }
+
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'laimiux'
+                    name 'Laimonas Turauskas'
+                    email 'laimiux@gmail.com'
+                }
+            }
+        }
+    }
+}
+
