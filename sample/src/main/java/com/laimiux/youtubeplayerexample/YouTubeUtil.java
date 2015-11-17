@@ -1,4 +1,4 @@
-package com.laimiux.youtube;
+package com.laimiux.youtubeplayerexample;
 
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
@@ -13,10 +13,10 @@ import java.io.IOException;
  */
 public class YouTubeUtil {
 
-    public static YouTube createDefaultYouTube(String applicationName) {
-        return new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
-            public void initialize(HttpRequest request) throws IOException {
-            }
-        }).setApplicationName(applicationName).build();
-    }
+  public static YouTube createDefaultYouTube(String applicationName) {
+    return new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
+      public void initialize(HttpRequest request) throws IOException {
+      }
+    }).setApplicationName(applicationName).build();
+  }
 }

@@ -22,7 +22,7 @@
         </activity>
 
 
-        <activity android:name="com.laimiux.youtube.PlayerActivity"
+        <activity android:name=".PlayerActivity"
             />
 
     </application>

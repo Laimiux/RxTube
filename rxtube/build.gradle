@@ -1,0 +1,17 @@
+apply plugin: 'java'
+
+
+dependencies {
+    compile 'io.reactivex:rxjava:1.0.16'
+    compile 'com.google.apis:google-api-services-youtube:v3-rev152-1.20.0'
+
+    testCompile 'junit:junit:4.12'
+}
+
+task myJar(type: Jar)
+
+artifacts {
+    archives myJar
+}
+
+apply from: rootProject.file('gradle/gradle-mvn-jar-push.gradle')

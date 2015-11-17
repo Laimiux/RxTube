@@ -1,27 +1,41 @@
-android-youtube-listview
+RxTube
 ============
 
-Android widget which allows easy embedding of youtube videos into your application.
+A Reactive wrapper around Google's YouTube Data API
 
-![ListView](website/list.png)
+Example
+-
+```java
+YouTube youTube = initYouTube();
+RxTube rxTube = new RxTube(youTube, browserKey);
+```
 
-TODO
--------
 
-* Save state on rotation
+```java
+final String videoId = "iX-QaNzd-0Y";
+rxTube.create(new RxTube.Query<YouTube.Videos.List>() {
+  @Override public YouTube.Videos.List create(YouTube youTube) throws Exception {
+    final YouTube.Videos.List query = youTube.videos().list("snippet");
+    query.setId(videoId);
+    return query;
+  }
+});
+```
 
 
 Download
--------
-
-Via Gradle
+-
 ```groovy
-compile('com.laimiux:android-youtube-listview:0.1.2@aar') {
-    transitive = true;
-}
+compile 'com.laimiux.rxtube:rxtube:0.0.1'
 ```
 
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-android--youtube--listview-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1112)
+Sample
+-
+
+A simple list of videos that you can watch by clicking on it.
+
+![ListView](website/list.png)
+
 
 License
 -------
