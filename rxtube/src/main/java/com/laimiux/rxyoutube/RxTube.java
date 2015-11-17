@@ -13,7 +13,7 @@ import rx.functions.Func0;
 import rx.schedulers.Schedulers;
 
 /**
- *
+ * A class responsible for creating {@linkplain Observable observables} for {@link YouTube}
  */
 public final class RxTube {
   private final YouTube youtube;
@@ -26,6 +26,9 @@ public final class RxTube {
     backgroundScheduler = Schedulers.from(Executors.newSingleThreadExecutor());
   }
 
+  /**
+   * Create an observable that performs a query and returns a response
+   */
   public <T extends YouTubeRequest<R>, R> Observable<R> create(final Query<T> query) {
     final Observable<R> observable = Observable.create(new Observable.OnSubscribe<R>() {
       @Override public void call(Subscriber<? super R> subscriber) {
@@ -50,6 +53,9 @@ public final class RxTube {
     return observable.subscribeOn(backgroundScheduler).observeOn(backgroundScheduler);
   }
 
+  /**
+   *  Represents a factory that creates a YouTube request
+   */
   public interface Query<T extends YouTubeRequest> {
     T create(YouTube youTube) throws Exception;
   }
