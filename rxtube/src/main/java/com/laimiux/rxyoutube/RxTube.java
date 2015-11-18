@@ -21,9 +21,13 @@ public final class RxTube {
   private final Scheduler backgroundScheduler;
 
   public RxTube(YouTube youtube, String browserKey) {
+    this(youtube, browserKey, Schedulers.from(Executors.newSingleThreadExecutor()));
+  }
+
+  public RxTube(YouTube youtube, String browserKey, Scheduler scheduler) {
     this.youtube = youtube;
     this.browserKey = browserKey;
-    backgroundScheduler = Schedulers.from(Executors.newSingleThreadExecutor());
+    this.backgroundScheduler = scheduler;
   }
 
   /**
