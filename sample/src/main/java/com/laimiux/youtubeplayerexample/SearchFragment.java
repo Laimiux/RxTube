@@ -24,6 +24,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -33,6 +34,7 @@ public class SearchFragment extends Fragment {
   @InjectView(R.id.progress_indicator_view) ProgressBar progressBar;
 
   private RxTube rxTube;
+  private Subscription searchSubscription;
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.youtube_list_view, container, false);
@@ -57,7 +59,7 @@ public class SearchFragment extends Fragment {
 
 
     progressBar.setVisibility(View.VISIBLE);
-    rxTube.create(new RxTube.Query<YouTube.Search.List>() {
+    searchSubscription = rxTube.create(new RxTube.Query<YouTube.Search.List>() {
       @Override public YouTube.Search.List create(YouTube youTube) throws Exception {
         final YouTube.Search.List request = youTube.search().list("snippet");
         request.setQ("funny cats");
@@ -104,5 +106,14 @@ public class SearchFragment extends Fragment {
         // TO-DO handle error
       }
     });
+  }
+
+
+  @Override public void onDestroy() {
+    if(searchSubscription != null) {
+      searchSubscription.unsubscribe();
+      searchSubscription = null;
+    }
+    super.onDestroy();
   }
 }
