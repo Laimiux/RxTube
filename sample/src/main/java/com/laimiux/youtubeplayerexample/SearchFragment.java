@@ -56,12 +56,8 @@ public class SearchFragment extends Fragment {
         return request;
       }
     }).map(new Func1<SearchListResponse, String>() {
-      @Override public String call(SearchListResponse searchListResponse) {
-        final List<SearchResult> results = searchListResponse.getItems();
-        Log.d("Search", "Found " + results.size() + " results");
-        for (SearchResult result : results) {
-          Log.d("Search", "Result: " + result);
-        }
+      @Override public String call(SearchListResponse response) {
+        final List<SearchResult> results = response.getItems();
 
         StringBuilder builder = new StringBuilder();
         for (SearchResult result : results) {
@@ -86,7 +82,7 @@ public class SearchFragment extends Fragment {
     }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<VideoListResponse>() {
       @Override public void call(VideoListResponse response) {
         progressBar.setVisibility(View.GONE);
-        if(getContext() != null) {
+        if (getContext() != null) {
           listView.setAdapter(new SimpleYoutubeListAdapter(getContext(), response.getItems()));
         }
 
