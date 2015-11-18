@@ -1,6 +1,7 @@
 package com.laimiux.youtubeplayerexample;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -83,10 +84,10 @@ public class PlayerActivity extends YouTubeBaseActivity {
     }
   }
 
-  public static void showPlayer(Activity activity, String youtubeDevKey, String videoId) {
-    Intent intent = new Intent(activity, PlayerActivity.class);
+  public static void showPlayer(Context context, String youtubeDevKey, String videoId) {
+    Intent intent = new Intent(context, PlayerActivity.class);
     intent.putExtra(YOUTUBE_DEV_KEY_EXTRA, youtubeDevKey);
     intent.putExtra(VIDEO_ID_EXTRA, videoId);
-    activity.startActivity(intent);
+    context.startActivity(intent);
   }
 }

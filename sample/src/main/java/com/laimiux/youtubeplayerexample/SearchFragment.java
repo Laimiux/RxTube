@@ -8,12 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
 import com.laimiux.rxyoutube.RxTube;
 
@@ -39,6 +41,14 @@ public class SearchFragment extends Fragment {
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
+
+
+    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        final Video video = (Video) parent.getItemAtPosition(position);
+        PlayerUtil.showPlayer(getContext(), video.getId());
+      }
+    });
   }
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {

@@ -91,7 +91,7 @@ public class ListViewActivity extends Activity {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Video video = (Video) parent.getItemAtPosition(position);
-        showVideo(video);
+        PlayerUtil.showPlayer(ListViewActivity.this, video.getId());
       }
     });
   }
@@ -103,9 +103,5 @@ public class ListViewActivity extends Activity {
     }
 
     super.onDestroy();
-  }
-
-  private void showVideo(Video video) {
-    PlayerActivity.showPlayer(this, BuildConfig.YOUTUBE_DEV_KEY, video.getId());
   }
 }
