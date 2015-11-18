@@ -14,13 +14,17 @@ import android.widget.ProgressBar;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.VideoListResponse;
 import com.laimiux.rxyoutube.RxTube;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 public class SearchFragment extends Fragment {
   @InjectView(R.id.youtube_list_view) ListView listView;
@@ -47,20 +51,50 @@ public class SearchFragment extends Fragment {
       @Override public YouTube.Search.List create(YouTube youTube) throws Exception {
         final YouTube.Search.List request = youTube.search().list("snippet");
         request.setQ("funny cats");
+        request.setType("video");
+        request.setMaxResults(20L);
         return request;
       }
-    }).subscribe(new Action1<SearchListResponse>() {
-      @Override public void call(SearchListResponse response) {
-        progressBar.setVisibility(View.GONE);
-        final List<SearchResult> results = response.getItems();
+    }).map(new Func1<SearchListResponse, String>() {
+      @Override public String call(SearchListResponse searchListResponse) {
+        final List<SearchResult> results = searchListResponse.getItems();
         Log.d("Search", "Found " + results.size() + " results");
         for (SearchResult result : results) {
           Log.d("Search", "Result: " + result);
         }
+
+        StringBuilder builder = new StringBuilder();
+        for (SearchResult result : results) {
+          if (builder.length() > 0) {
+            builder.append(',');
+          }
+          builder.append(result.getId().getVideoId());
+        }
+
+        return builder.toString();
+      }
+    }).flatMap(new Func1<String, Observable<VideoListResponse>>() {
+      @Override public Observable<VideoListResponse> call(final String ids) {
+        return rxTube.create(new RxTube.Query<YouTube.Videos.List>() {
+          @Override public YouTube.Videos.List create(YouTube youTube) throws Exception {
+            final YouTube.Videos.List request = youTube.videos().list("snippet");
+            request.setId(ids);
+            return request;
+          }
+        });
+      }
+    }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<VideoListResponse>() {
+      @Override public void call(VideoListResponse response) {
+        progressBar.setVisibility(View.GONE);
+        if(getContext() != null) {
+          listView.setAdapter(new SimpleYoutubeListAdapter(getContext(), response.getItems()));
+        }
+
       }
     }, new Action1<Throwable>() {
       @Override public void call(Throwable throwable) {
         progressBar.setVisibility(View.GONE);
+        Log.e("Search", "failure: " + throwable, throwable);
         // TO-DO handle error
       }
     });
