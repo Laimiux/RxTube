@@ -26,7 +26,7 @@ rxTube.create(new RxTube.Query<YouTube.Videos.List>() {
 Download
 -
 ```groovy
-compile 'com.laimiux.rxtube:rxtube:0.0.1'
+compile 'com.laimiux.rxtube:rxtube:0.0.2'
 ```
 
 Sample

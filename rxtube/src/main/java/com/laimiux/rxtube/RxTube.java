@@ -1,4 +1,4 @@
-package com.laimiux.rxyoutube;
+package com.laimiux.rxtube;
 
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeRequest;

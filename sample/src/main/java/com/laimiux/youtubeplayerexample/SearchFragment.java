@@ -17,7 +17,7 @@ import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
-import com.laimiux.rxyoutube.RxTube;
+import com.laimiux.rxtube.RxTube;
 
 import java.util.List;
 

@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
-import com.laimiux.rxyoutube.RxTube;
+import com.laimiux.rxtube.RxTube;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.google.api.services.youtube.YouTube;
-import com.laimiux.rxyoutube.RxTube;
+import com.laimiux.rxtube.RxTube;
 
 /**
  * Created by laimiux on 11/2/14.
