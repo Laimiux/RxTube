@@ -59,7 +59,6 @@ public class ListViewActivity extends Activity {
     ids.add("6teOmBuMxw4");
     ids.add("RBumgq5yVrA");
 
-
     // Show loader here
     progressBar.setVisibility(View.VISIBLE);
     final RxTube rxTube = YoutubeExampleApplication.get(this).getYouTube();
@@ -97,7 +96,7 @@ public class ListViewActivity extends Activity {
   }
 
   @Override protected void onDestroy() {
-    if(videoSubscription != null) {
+    if (videoSubscription != null) {
       videoSubscription.unsubscribe();
       videoSubscription = null;
     }
