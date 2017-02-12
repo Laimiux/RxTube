@@ -8,13 +8,13 @@ try {
 }
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.laimiux.youtubeplayerexample"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
@@ -29,12 +29,18 @@ android {
             buildConfigField "String", "YOUTUBE_BROWSER_DEV_KEY", "\"${props.getProperty("youtubeBrowserDevKey")}\""
         }
     }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:appcompat-v7:25.1.1'
     compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'io.reactivex:rxandroid:1.2.1'
     compile project(':rxtube')
 
 //    compile 'com.netflix.rxjava:rxjava-android:0.20.6'
