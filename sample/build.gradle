@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
 apply plugin: 'com.android.application'
 
 Properties props = new Properties()
@@ -9,7 +21,7 @@ try {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.laimiux.youtubeplayerexample"
@@ -43,7 +55,6 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile project(':rxtube')
 
-//    compile 'com.netflix.rxjava:rxjava-android:0.20.6'
     compile 'com.squareup.picasso:picasso:2.3.4'
     compile 'com.jakewharton:butterknife:6.0.0'
 }

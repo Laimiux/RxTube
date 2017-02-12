@@ -3,13 +3,11 @@ package com.laimiux.rxtube;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeRequest;
 
-import java.io.IOException;
 import java.util.concurrent.Executors;
 
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
-import rx.functions.Func0;
 import rx.schedulers.Schedulers;
 
 /**
