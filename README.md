@@ -26,8 +26,14 @@ rxTube.create(new RxTube.Query<YouTube.Videos.List>() {
 Download
 -
 ```groovy
-compile 'com.laimiux.rxtube:rxtube:0.0.2'
+compile('com.laimiux.rxtube:rxtube:0.0.3') {
+    exclude group: 'com.google.code.findbugs', module: 'jsr305'
+}
 ```
+
+
+If you are seeing a
+
 
 Sample
 -
