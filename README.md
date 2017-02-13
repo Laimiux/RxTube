@@ -34,6 +34,12 @@ Sample
 
 A simple list of videos that you can watch by clicking on it.
 
+To build it, add `youtube.properties` to sample directory with
+```
+youtubeDeveloperKey=EDIT_THIS
+youtubeBrowserDevKey=EDIT_THIS
+```
+
 ![ListView](website/list.png)
 
 
